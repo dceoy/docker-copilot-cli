@@ -62,10 +62,8 @@ USER "${USER_NAME}"
 
 ENV PATH="/home/${USER_NAME}/.local/bin:${PATH}"
 
-# hadolint ignore=DL3016
 RUN \
-      --mount=type=cache,target=/home/${USER_NAME}/.npm \
-      npm install -g @github/copilot
+      curl -fsSL https://gh.io/copilot-install | bash
 
 RUN \
       /usr/local/bin/oh-my-zsh --unattended
