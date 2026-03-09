@@ -1,0 +1,25 @@
+---
+services:
+  copilot-cli:
+    container_name: copilot-cli
+    image: dceoy/copilot-cli:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: cli
+      args:
+        USER_NAME: copilot
+        USER_UID: '1001'
+        USER_GID: '1001'
+    environment:
+      GITHUB_TOKEN: ${GITHUB_TOKEN:-}
+    tty: true
+    stdin_open: true
+    volumes:
+      - .:/workspace
+      - copilot-config:/home/copilot/.config
+    working_dir: /workspace
+    entrypoint:
+      - copilot
+volumes:
+  copilot-config:
