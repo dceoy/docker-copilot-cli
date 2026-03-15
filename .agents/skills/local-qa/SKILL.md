@@ -1,28 +1,22 @@
 ---
 name: local-qa
-description: Run local QA including formatting and linting for the repository. Use whenever any file has been updated, and install missing QA tools before rerunning.
+description: Run local QA including formatting and linting for the repository. Use whenever any file has been updated.
 disable-model-invocation: true
 ---
 
 # Local QA (format and lint)
 
-Run the local QA script from the directory of this file:
-
-```bash
-./scripts/qa.sh
-```
+Run the local QA script `scripts/qa.sh` in this skill.
 
 ## Procedure
 
 - Execute the script exactly as shown above when this skill is triggered.
 - Capture and summarize key output (success/failure, major warnings, and any files modified).
-- If the script fails due to missing tooling, install the missing tool(s) and rerun the script once.
-- Prefer the platform package manager for missing tools used by this repo:
-  - macOS (Homebrew): `brew install shellcheck actionlint yamllint checkov zizmor`
-  - macOS `npx` fallback: `brew install node`
-  - Linux (Debian/Ubuntu) base packages: `sudo apt-get update && sudo apt-get install -y shellcheck yamllint nodejs npm pipx golang rustc cargo`
-  - Linux `checkov`: `pipx install checkov`
-  - Linux `actionlint`: `go install github.com/rhysd/actionlint/cmd/actionlint@latest`
-  - Linux `zizmor`: `cargo install zizmor`
-  - Linux `PATH` must include `~/.local/bin`, `~/go/bin`, and `~/.cargo/bin` before rerunning.
-- If installation fails or a package manager is unavailable, report exactly what failed and why.
+- If the script fails due to missing tooling (`command not found`, missing executable, or equivalent), install the missing tool(s) and rerun `./scripts/qa.sh`.
+- Install tools using this order of preference:
+  1. Use the project's package manager when applicable (`uv`/`poetry` for Python, package manager scripts/dependencies for Node.js).
+  2. Use a system package manager (`brew` on macOS, `apt` on Debian/Ubuntu) when project-local install is not applicable.
+  3. Use language-specific installers as fallback (`pipx`/`pip`, `npm`, `go install`, etc.).
+- If multiple tools are missing, repeat install -> rerun until QA completes or you hit a blocker.
+- If installation fails or requires unavailable privileges, report what was attempted, the exact failure, and stop.
+- Do not run unrelated commands; only run commands needed for QA and missing-tool installation.
