@@ -82,3 +82,4 @@ RUN \
       && git config --global user.email "${USER_NAME}@localhost"
 
 ENTRYPOINT ["copilot"]
+CMD ["--allow-all-tools"]

@@ -21,5 +21,7 @@ services:
     working_dir: /workspace
     entrypoint:
       - copilot
+    command:
+      - --allow-all-tools
 volumes:
   copilot-config:
