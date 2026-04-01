@@ -21,9 +21,9 @@ services:
       - config-data:/home/copilot/.config
     working_dir: /workspace
     post_start:
-      - command: chown copilot:copilot /home/copilot/.copilot
+      - command: bash -c '[[ "$(stat -c "%U:%G" /home/copilot/.copilot)" != "root:root" ]] || chown copilot:copilot /home/copilot/.copilot'
         user: root
-      - command: chown copilot:copilot /home/copilot/.config
+      - command: bash -c '[[ "$(stat -c "%U:%G" /home/copilot/.config)" != "root:root" ]] || chown copilot:copilot /home/copilot/.config'
         user: root
     entrypoint:
       - /usr/bin/zsh
