@@ -8,7 +8,7 @@ services:
       dockerfile: Dockerfile
       target: cli
       args:
-        USER_NAME: copilot
+        USER_NAME: agent
         USER_UID: '1001'
         USER_GID: '1001'
     environment:
@@ -17,13 +17,13 @@ services:
     stdin_open: true
     volumes:
       - .:/workspace
-      - copilot-data:/home/copilot/.copilot
-      - config-data:/home/copilot/.config
+      - copilot-data:/home/agent/.copilot
+      - config-data:/home/agent/.config
     working_dir: /workspace
     post_start:
-      - command: bash -c '[[ "$(stat -c "%U:%G" /home/copilot/.copilot)" != "root:root" ]] || chown copilot:copilot /home/copilot/.copilot'
+      - command: bash -c '[[ "$(stat -c "%U:%G" /home/agent/.copilot)" != "root:root" ]] || chown agent:agent /home/agent/.copilot'
         user: root
-      - command: bash -c '[[ "$(stat -c "%U:%G" /home/copilot/.config)" != "root:root" ]] || chown copilot:copilot /home/copilot/.config'
+      - command: bash -c '[[ "$(stat -c "%U:%G" /home/agent/.config)" != "root:root" ]] || chown agent:agent /home/agent/.config'
         user: root
     entrypoint:
       - /usr/bin/zsh

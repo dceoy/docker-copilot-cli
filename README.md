@@ -23,5 +23,5 @@ Dockerfile and compose.yml for [GitHub Copilot CLI](https://github.com/github/co
 2. Start an interactive session:
 
    ```bash
-   GITHUB_TOKEN=... docker compose run --rm copilot-cli
+   docker compose run --rm copilot-cli
    ```

@@ -2,7 +2,7 @@
 ARG UBUNTU_VERSION=24.04
 FROM public.ecr.aws/docker/library/ubuntu:${UBUNTU_VERSION} AS cli
 
-ARG USER_NAME=copilot
+ARG USER_NAME=agent
 ARG USER_UID=1001
 ARG USER_GID=1001
 
