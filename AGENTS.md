@@ -4,11 +4,11 @@
 
 This repository is intentionally small and Docker-centric.
 
-- `Dockerfile`: Builds the `copilot` CLI image on Ubuntu.
-- `compose.yml`: Local runtime defaults (container name, mount, env wiring, entrypoint).
-- `README.md`: Primary usage documentation.
+- `Dockerfile`: Builds the Ubuntu-based `copilot` CLI image, installs the CLI into `/usr/local`, and provisions the default `agent` user plus bundled tools.
+- `compose.yml`: Defines the local `copilot-cli` service, workspace mount, persistent config volumes, and the default `zsh -lc 'copilot --yolo'` startup command.
+- `README.md`: Primary usage guide covering quick start, common container commands, and runtime layout.
 - `CLAUDE.md`: Symlink to `AGENTS.md` for Claude-compatible repo guidance.
-- `.agents/skills/local-qa/`: Local QA skill definition and `scripts/qa.sh`.
+- `.agents/skills/local-qa/`: Local QA skill definition and `scripts/qa.sh` for formatting, linting, and security scanning.
 - `.github/workflows/ci.yml`: CI/CD orchestration (lint/scan, build/push, Dependabot auto-merge).
 - `.github/dependabot.yml` and `.github/renovate.json`: dependency update automation.
 
@@ -19,7 +19,7 @@ Keep new files at the repo root unless they are CI/config/automation artifacts (
 Use Docker Compose for all local workflows:
 
 - `docker compose build` builds the `copilot-cli` image from `Dockerfile`.
-- `GITHUB_TOKEN=... docker compose run --rm copilot-cli` starts an interactive CLI session.
+- `GITHUB_TOKEN=... docker compose run --rm copilot-cli` starts an interactive CLI session in `/workspace` with the default `copilot --yolo` command.
 - `cd .agents/skills/local-qa && ./scripts/qa.sh` runs repository markdown formatting plus lint/security checks.
 
 Before opening a PR, at minimum run a fresh build and one container smoke test.
