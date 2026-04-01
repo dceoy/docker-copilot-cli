@@ -17,11 +17,19 @@ services:
     stdin_open: true
     volumes:
       - .:/workspace
-      - copilot-config:/home/copilot/.config
+      - copilot-data:/home/copilot/.copilot
+      - config-data:/home/copilot/.config
     working_dir: /workspace
+    post_start:
+      - command: chown copilot:copilot /home/copilot/.copilot
+        user: root
+      - command: chown copilot:copilot /home/copilot/.config
+        user: root
     entrypoint:
-      - copilot
+      - /usr/bin/zsh
     command:
-      - --allow-all-tools
+      - -lc
+      - 'copilot --yolo'
 volumes:
-  copilot-config:
+  copilot-data:
+  config-data:

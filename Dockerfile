@@ -35,7 +35,7 @@ RUN \
       apt-get -yqq update \
       && apt-get -yqq upgrade \
       && apt-get -yqq install --no-install-recommends --no-install-suggests \
-        gh git jq npm python3-pip ripgrep unzip vim wget zsh
+        gh git jq npm python3-pip ripgrep tree unzip vim wget zsh
 
 # hadolint ignore=DL3013
 RUN \
@@ -58,12 +58,13 @@ RUN \
 
 HEALTHCHECK NONE
 
+RUN \
+      curl -fsSL https://gh.io/copilot-install \
+        | PREFIX=/usr/local bash
+
 USER "${USER_NAME}"
 
 ENV PATH="/home/${USER_NAME}/.local/bin:${PATH}"
-
-RUN \
-      curl -fsSL https://gh.io/copilot-install | bash
 
 RUN \
       /usr/local/bin/oh-my-zsh --unattended
@@ -81,5 +82,5 @@ RUN \
       && git config --global user.name "${USER_NAME}" \
       && git config --global user.email "${USER_NAME}@localhost"
 
-ENTRYPOINT ["copilot"]
-CMD ["--allow-all-tools"]
+ENTRYPOINT ["/usr/local/bin/copilot"]
+CMD ["--allow-all"]
