@@ -83,4 +83,4 @@ RUN \
       && git config --global user.email "${USER_NAME}@localhost"
 
 ENTRYPOINT ["/usr/local/bin/copilot"]
-CMD ["--allow-all"]
+CMD ["--yolo"]
