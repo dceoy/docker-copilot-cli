@@ -48,9 +48,8 @@ RUN \
       && chmod +x /usr/local/bin/print-github-tags
 
 RUN \
-      curl -fsSL -o /usr/local/bin/oh-my-zsh \
-        https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh \
-      && chmod +x /usr/local/bin/oh-my-zsh
+      curl -fsSL -o /usr/local/bin/install.ohmyz.sh https://install.ohmyz.sh \
+      && chmod +x /usr/local/bin/install.ohmyz.sh
 
 RUN \
       groupadd --gid "${USER_GID}" "${USER_NAME}" \
@@ -67,7 +66,7 @@ USER "${USER_NAME}"
 ENV PATH="/home/${USER_NAME}/.local/bin:${PATH}"
 
 RUN \
-      /usr/local/bin/oh-my-zsh --unattended
+      /usr/local/bin/install.ohmyz.sh --unattended
 
 RUN \
       echo '.DS_Store' > "${HOME}/.gitignore" \
@@ -82,5 +81,5 @@ RUN \
       && git config --global user.name "${USER_NAME}" \
       && git config --global user.email "${USER_NAME}@localhost"
 
-ENTRYPOINT ["/usr/local/bin/copilot"]
-CMD ["--yolo"]
+ENTRYPOINT ["/usr/bin/zsh"]
+CMD ["-c", "copilot"]

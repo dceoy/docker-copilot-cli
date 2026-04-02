@@ -25,6 +25,8 @@ services:
         user: root
       - command: bash -c '[[ "$(stat -c "%U:%G" /home/agent/.config)" != "root:root" ]] || chown agent:agent /home/agent/.config'
         user: root
+      - command: git config --global --add safe.directory /workspace
+        user: agent
     entrypoint:
       - /usr/bin/zsh
     command:
