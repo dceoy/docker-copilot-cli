@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 ARG UBUNTU_VERSION=24.04
-FROM public.ecr.aws/docker/library/ubuntu:${UBUNTU_VERSION} AS cli
+FROM public.ecr.aws/docker/library/ubuntu:${UBUNTU_VERSION} AS base
 
 ARG USER_NAME=agent
 ARG USER_UID=1001
@@ -52,18 +52,18 @@ RUN \
       && chmod +x /usr/local/bin/install.ohmyz.sh
 
 RUN \
+      curl -fsSL https://gh.io/copilot-install | PREFIX=/usr/local bash
+
+RUN  \
       groupadd --gid "${USER_GID}" "${USER_NAME}" \
       && useradd --uid "${USER_UID}" --gid "${USER_GID}" --shell /bin/bash --create-home "${USER_NAME}"
 
 HEALTHCHECK NONE
 
-RUN \
-      curl -fsSL https://gh.io/copilot-install \
-        | PREFIX=/usr/local bash
+
+FROM base AS cli
 
 USER "${USER_NAME}"
-
-ENV PATH="/home/${USER_NAME}/.local/bin:${PATH}"
 
 RUN \
       /usr/local/bin/install.ohmyz.sh --unattended
@@ -81,5 +81,5 @@ RUN \
       && git config --global user.name "${USER_NAME}" \
       && git config --global user.email "${USER_NAME}@localhost"
 
-ENTRYPOINT ["/usr/bin/zsh"]
-CMD ["-c", "copilot"]
+ENTRYPOINT ["/usr/local/bin/copilot"]
+CMD ["--yolo"]
