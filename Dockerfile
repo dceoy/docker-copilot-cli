@@ -56,8 +56,7 @@ RUN \
 
 RUN  \
       groupadd --gid "${USER_GID}" "${USER_NAME}" \
-      && useradd --uid "${USER_UID}" --gid "${USER_GID}" --shell /bin/bash --create-home "${USER_NAME}" \
-      && chsh --shell /bin/zsh "${USER_NAME}"
+      && useradd --uid "${USER_UID}" --gid "${USER_GID}" --shell /bin/zsh --create-home "${USER_NAME}"
 
 HEALTHCHECK NONE
 
