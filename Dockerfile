@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 ARG UBUNTU_VERSION=24.04
-FROM public.ecr.aws/docker/library/ubuntu:${UBUNTU_VERSION} AS cli
+FROM public.ecr.aws/docker/library/ubuntu:${UBUNTU_VERSION} AS base
 
 ARG USER_NAME=agent
 ARG USER_UID=1001
@@ -48,26 +48,25 @@ RUN \
       && chmod +x /usr/local/bin/print-github-tags
 
 RUN \
-      curl -fsSL -o /usr/local/bin/oh-my-zsh \
-        https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh \
-      && chmod +x /usr/local/bin/oh-my-zsh
+      curl -fsSL -o /usr/local/bin/install.ohmyz.sh https://install.ohmyz.sh \
+      && chmod +x /usr/local/bin/install.ohmyz.sh
 
 RUN \
+      curl -fsSL https://gh.io/copilot-install | PREFIX=/usr/local bash
+
+RUN  \
       groupadd --gid "${USER_GID}" "${USER_NAME}" \
       && useradd --uid "${USER_UID}" --gid "${USER_GID}" --shell /bin/bash --create-home "${USER_NAME}"
 
 HEALTHCHECK NONE
 
-RUN \
-      curl -fsSL https://gh.io/copilot-install \
-        | PREFIX=/usr/local bash
+
+FROM base AS cli
 
 USER "${USER_NAME}"
 
-ENV PATH="/home/${USER_NAME}/.local/bin:${PATH}"
-
 RUN \
-      /usr/local/bin/oh-my-zsh --unattended
+      /usr/local/bin/install.ohmyz.sh --unattended
 
 RUN \
       echo '.DS_Store' > "${HOME}/.gitignore" \
